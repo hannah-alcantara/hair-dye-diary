@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Plus, X, Camera, Trash2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface Formula {
   shade: string;
@@ -41,6 +42,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
   showCancel = false,
   isModal = false
 }) => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     date: entry?.date || new Date().toISOString().split('T')[0],
     name: entry?.name || '',
@@ -209,7 +211,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
   const formContent = (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
           Date
         </label>
         <input
@@ -219,12 +221,12 @@ const EntryForm: React.FC<EntryFormProps> = ({
           value={formData.date}
           onChange={handleChange}
           required
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
 
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
           Name
         </label>
         <input
@@ -235,36 +237,36 @@ const EntryForm: React.FC<EntryFormProps> = ({
           onChange={handleChange}
           required
           placeholder="Enter entry name"
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
 
       <div>
         <div className="flex items-center justify-between mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-gray-700">
             Formulas
           </label>
           <button
             type="button"
             onClick={addFormula}
-            className="px-3 py-1 text-sm bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-md hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
+            className="px-3 py-2 text-xs bg-gray-50 text-indigo-800 rounded-md hover:bg-indigo-200 transition-colors flex items-center"
           >
-            <Plus size={14} className="mr-1" />
+            <Plus size={12} className="mr-1" />
             Add Formula
           </button>
         </div>
         <div className="space-y-4">
           {formData.formulas.map((formula, index) => (
-            <div key={index} className="space-y-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-md">
+            <div key={index} className="space-y-3 p-4 bg-gray-50 rounded-md">
               <div className="flex items-center justify-between">
-                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <h4 className="text-sm font-medium text-gray-700">
                   Formula {index + 1}
                 </h4>
                 {formData.formulas.length > 1 && (
                   <button
                     type="button"
                     onClick={() => removeFormula(index)}
-                    className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 text-sm"
+                    className="text-red-600"
                   >
                     Remove
                   </button>
@@ -273,7 +275,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label htmlFor={`shade-${index}`} className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
+                  <label htmlFor={`shade-${index}`} className="block text-sm font-medium text-gray-600 mb-1">
                     Shade
                   </label>
                   <input
@@ -284,12 +286,12 @@ const EntryForm: React.FC<EntryFormProps> = ({
                     onChange={handleChange}
                     required
                     placeholder="e.g., 7.1 Ash Blonde"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-900 placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor={`parts-${index}`} className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
+                  <label htmlFor={`parts-${index}`} className="block text-sm font-medium text-gray-600 mb-1">
                     Parts
                   </label>
                   <input
@@ -301,12 +303,12 @@ const EntryForm: React.FC<EntryFormProps> = ({
                     required
                     min="1"
                     placeholder="1"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-900 placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor={`color-${index}`} className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
+                  <label htmlFor={`color-${index}`} className="block text-sm font-medium text-gray-600 mb-1">
                     Color (g)
                   </label>
                   <input
@@ -319,7 +321,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
                     min="0"
                     step="0.1"
                     placeholder="30"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-900 placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -329,8 +331,8 @@ const EntryForm: React.FC<EntryFormProps> = ({
       </div>
 
       <div>
-        <label htmlFor="developer" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Developer (g) <span className="text-gray-500 dark:text-gray-400 text-xs">(optional)</span>
+        <label htmlFor="developer" className="block text-sm font-medium text-gray-700 mb-2">
+          Developer (g) <span className="text-gray-500">(optional)</span>
         </label>
         <input
           type="number"
@@ -339,14 +341,14 @@ const EntryForm: React.FC<EntryFormProps> = ({
           value={formData.developer}
           onChange={handleChange}
           min="0"
-          step="0.1"
+          step="1"
           placeholder="60"
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 text-gray-700"
         />
       </div>
 
       <div>
-        <label htmlFor="processingTime" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label htmlFor="processingTime" className="block text-sm font-medium text-gray-700 mb-2">
           Processing Time (minutes)
         </label>
         <input
@@ -358,12 +360,12 @@ const EntryForm: React.FC<EntryFormProps> = ({
           required
           min="0"
           placeholder="30"
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 text-gray-700"
         />
       </div>
 
       <div>
-        <label htmlFor="notes" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-2">
           Notes
         </label>
         <textarea
@@ -373,13 +375,13 @@ const EntryForm: React.FC<EntryFormProps> = ({
           onChange={handleChange}
           rows={4}
           placeholder="Any additional notes about the process..."
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-vertical"
+          className="w-full px-3 py-2 border border-gray-300 text-gray-700"
         />
       </div>
 
       {/* Photos Section */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-4">
           Photos
         </label>
 
@@ -387,8 +389,8 @@ const EntryForm: React.FC<EntryFormProps> = ({
         <div className="grid grid-cols-2 gap-4 mb-6">
           {/* Before Photo */}
           <div>
-            <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Before Photo</h4>
-            <div className="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center overflow-hidden relative">
+            <h4 className="text-sm font-medium text-gray-600 mb-2">Before Photo</h4>
+            <div className="aspect-square bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden relative">
               {formData.beforePhoto ? (
                 <PhotoDisplay
                   photo={formData.beforePhoto}
@@ -400,7 +402,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
                   }}
                 />
               ) : (
-                <label className="cursor-pointer w-full h-full flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                <label className="cursor-pointer w-full h-full flex items-center justify-center hover:bg-gray-200 transition-colors">
                   <input
                     id="before-photo-input"
                     type="file"
@@ -410,8 +412,8 @@ const EntryForm: React.FC<EntryFormProps> = ({
                   />
                   <div className="text-center">
                     <Camera size={24} className="text-gray-400 mb-2 mx-auto" />
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Click to upload</p>
-                    <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">Before photo</p>
+                    <p className="text-xs text-gray-500">Click to upload</p>
+                    <p className="text-xs text-blue-600">Before photo</p>
                   </div>
                 </label>
               )}
@@ -420,8 +422,8 @@ const EntryForm: React.FC<EntryFormProps> = ({
 
           {/* After Photo */}
           <div>
-            <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">After Photo</h4>
-            <div className="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center overflow-hidden relative">
+            <h4 className="text-sm font-medium text-gray-600 mb-2">After Photo</h4>
+            <div className="aspect-square bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden relative">
               {formData.afterPhoto ? (
                 <PhotoDisplay
                   photo={formData.afterPhoto}
@@ -433,7 +435,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
                   }}
                 />
               ) : (
-                <label className="cursor-pointer w-full h-full flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                <label className="cursor-pointer w-full h-full flex items-center justify-center hover:bg-gray-200 transition-colors">
                   <input
                     id="after-photo-input"
                     type="file"
@@ -443,8 +445,8 @@ const EntryForm: React.FC<EntryFormProps> = ({
                   />
                   <div className="text-center">
                     <Camera size={24} className="text-gray-400 mb-2 mx-auto" />
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Click to upload</p>
-                    <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">After photo</p>
+                    <p className="text-xs text-gray-500">Click to upload</p>
+                    <p className="text-xs text-blue-600">After photo</p>
                   </div>
                 </label>
               )}
@@ -452,26 +454,6 @@ const EntryForm: React.FC<EntryFormProps> = ({
           </div>
         </div>
 
-        {/* Legacy Photo Upload (for backward compatibility) */}
-        <div>
-          <label htmlFor="photo" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
-            Additional Photo (Legacy)
-          </label>
-          <input
-            type="file"
-            id="photo"
-            name="photo"
-            onChange={handleFileChange}
-            accept="image/*"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-300 dark:hover:file:bg-blue-800"
-          />
-          {formData.photo && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 flex items-center gap-1">
-              <Camera size={12} />
-              Current file: {formData.photo.name}
-            </p>
-          )}
-        </div>
       </div>
 
       <div className={`flex ${showCancel ? 'justify-end space-x-3' : ''}`}>
@@ -496,14 +478,14 @@ const EntryForm: React.FC<EntryFormProps> = ({
 
   if (isModal) {
     return (
-      <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100] p-4'>
-        <div className='bg-white dark:bg-gray-800 rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto'>
-          <div className='sticky top-0 bg-white dark:bg-gray-800 border-b dark:border-gray-700 px-6 py-4 rounded-t-lg'>
+      <div className='fixed inset-0 bg-indigo-800 bg-opacity-50 flex items-center justify-center z-[100] p-4'>
+        <div className='bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto'>
+          <div className='sticky top-0 bg-white border-b px-6 py-4 rounded-t-lg'>
             <div className='flex items-center justify-between'>
-              <h2 className='text-xl font-semibold text-gray-900 dark:text-white'>{title}</h2>
+              <h2 className='text-xl font-semibold text-gray-900'>{title}</h2>
               <button
                 onClick={onCancel}
-                className='text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 flex items-center justify-center'
+                className='text-gray-400 hover:text-gray-600 flex items-center justify-center'
               >
                 <X size={20} />
               </button>
@@ -518,10 +500,19 @@ const EntryForm: React.FC<EntryFormProps> = ({
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
-      <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-8">
-        {title}
-      </h1>
+    <div className="bg-white rounded-lg shadow-md p-8">
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-2xl font-semibold text-indigo-800">
+          {title}
+        </h1>
+        <button
+          onClick={() => router.push('/')}
+          className="bg-gray-50 text-indigo-800 rounded-full hover:bg-indigo-200 flex items-center justify-center p-2 transition-colors"
+          aria-label="Close and return to home"
+        >
+          <X size={20} />
+        </button>
+      </div>
       {formContent}
     </div>
   );

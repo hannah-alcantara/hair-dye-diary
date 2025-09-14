@@ -120,7 +120,7 @@ const LogbookPage: React.FC<LogbookPageProps> = ({
             No entries yet. Add your first hair dye experience!
           </p>
           <Link
-            href='/'
+            href='/logbook'
             className='inline-flex items-center px-4 py-2 bg-indigo-800 hover:bg-indigo-700 text-white rounded-md transition-colors shadow-md text-sm'
           >
             Add First Entry
