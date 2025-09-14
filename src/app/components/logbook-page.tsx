@@ -111,7 +111,7 @@ const LogbookPage: React.FC<LogbookPageProps> = ({
       return (
         <div className='text-center py-16'>
           <div className='mb-4 flex justify-center'>
-            <Sparkles size={64} className='text-amber-400' />
+            <Sparkles size={64} className='text-yellow-400' />
           </div>
           <h3 className='text-xl font-serif text-gray-600 mb-2'>
             Your hair journey starts here
@@ -121,9 +121,9 @@ const LogbookPage: React.FC<LogbookPageProps> = ({
           </p>
           <Link
             href='/'
-            className='inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors shadow-md text-sm'
+            className='inline-flex items-center px-4 py-2 bg-indigo-800 hover:bg-indigo-700 text-white rounded-md transition-colors shadow-md text-sm'
           >
-            Create First Entry
+            Add First Entry
           </Link>
         </div>
       );
@@ -285,9 +285,8 @@ const LogbookPage: React.FC<LogbookPageProps> = ({
 
   return (
     <div
-      className={`${
-        side === "right" ? "w-full h-full" : "flex-1"
-      } ${borderClass} border-indigo-800 rounded-md relative`}
+      className={`${side === "right" ? "w-full h-full" : "flex-1"
+        } ${borderClass} border-indigo-800 rounded-md relative`}
     >
       {/* Page margin line */}
       <div

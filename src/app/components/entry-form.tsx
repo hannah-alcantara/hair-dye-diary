@@ -32,11 +32,11 @@ interface EntryFormProps {
   isModal?: boolean;
 }
 
-const EntryForm: React.FC<EntryFormProps> = ({ 
+const EntryForm: React.FC<EntryFormProps> = ({
   title,
   entry,
-  onSubmit, 
-  onCancel, 
+  onSubmit,
+  onCancel,
   submitLabel = "Save Entry",
   showCancel = false,
   isModal = false
@@ -59,7 +59,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const submittedEntry: HairDyeEntry = {
       id: entry?.id || Date.now().toString(),
       date: formData.date,
@@ -78,7 +78,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
     };
 
     onSubmit(submittedEntry);
-    
+
     if (!entry) {
       setFormData({
         date: new Date().toISOString().split('T')[0],
@@ -145,11 +145,11 @@ const EntryForm: React.FC<EntryFormProps> = ({
   };
 
   // Helper component to display photo with proper URL management
-  const PhotoDisplay: React.FC<{ photo: File; alt: string; onRemove: () => void; onReplace: () => void }> = ({ 
-    photo, 
-    alt, 
-    onRemove, 
-    onReplace 
+  const PhotoDisplay: React.FC<{ photo: File; alt: string; onRemove: () => void; onReplace: () => void }> = ({
+    photo,
+    alt,
+    onRemove,
+    onReplace
   }) => {
     const [imageUrl, setImageUrl] = useState<string | null>(null);
 
@@ -157,7 +157,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
       if (photo && photo instanceof File) {
         const url = URL.createObjectURL(photo);
         setImageUrl(url);
-        
+
         return () => {
           URL.revokeObjectURL(url);
         };
@@ -177,8 +177,8 @@ const EntryForm: React.FC<EntryFormProps> = ({
 
     return (
       <div className='relative w-full h-full group'>
-        <img 
-          src={imageUrl} 
+        <img
+          src={imageUrl}
           alt={alt}
           className='w-full h-full object-cover rounded-lg'
         />
@@ -270,7 +270,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
                   </button>
                 )}
               </div>
-              
+
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label htmlFor={`shade-${index}`} className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
@@ -287,7 +287,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
-                
+
                 <div>
                   <label htmlFor={`parts-${index}`} className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
                     Parts
@@ -382,7 +382,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
           Photos
         </label>
-        
+
         {/* Before/After Photo Grid */}
         <div className="grid grid-cols-2 gap-4 mb-6">
           {/* Before Photo */}
@@ -390,8 +390,8 @@ const EntryForm: React.FC<EntryFormProps> = ({
             <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Before Photo</h4>
             <div className="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center overflow-hidden relative">
               {formData.beforePhoto ? (
-                <PhotoDisplay 
-                  photo={formData.beforePhoto} 
+                <PhotoDisplay
+                  photo={formData.beforePhoto}
                   alt="Before photo"
                   onRemove={() => removePhoto('before')}
                   onReplace={() => {
@@ -423,8 +423,8 @@ const EntryForm: React.FC<EntryFormProps> = ({
             <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">After Photo</h4>
             <div className="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center overflow-hidden relative">
               {formData.afterPhoto ? (
-                <PhotoDisplay 
-                  photo={formData.afterPhoto} 
+                <PhotoDisplay
+                  photo={formData.afterPhoto}
                   alt="After photo"
                   onRemove={() => removePhoto('after')}
                   onReplace={() => {
