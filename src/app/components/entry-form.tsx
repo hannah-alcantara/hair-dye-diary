@@ -3,6 +3,10 @@
 import { useState, useEffect } from 'react';
 import { Plus, X, Camera, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { DatePicker } from '@/components/ui/date-picker';
 
 interface Formula {
   shade: string;
@@ -130,10 +134,6 @@ const EntryForm: React.FC<EntryFormProps> = ({
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setFormData(prev => ({ ...prev, photo: file }));
-  };
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'before' | 'after') => {
     const file = e.target.files?.[0] || null;
@@ -186,22 +186,25 @@ const EntryForm: React.FC<EntryFormProps> = ({
         />
         <div className='absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100'>
           <div className='flex space-x-2'>
-            <button
+            <Button
               type="button"
               onClick={onReplace}
-              className='px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded-md transition-colors flex items-center gap-1'
+              size="sm"
+              className='text-xs bg-blue-600 hover:bg-blue-700 text-white'
             >
               <Camera size={12} />
               Replace
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               onClick={onRemove}
-              className='px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded-md transition-colors flex items-center gap-1'
+              variant="destructive"
+              size="sm"
+              className='text-xs bg-red-600 hover:bg-red-700 text-white'
             >
               <Trash2 size={12} />
               Remove
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -214,14 +217,15 @@ const EntryForm: React.FC<EntryFormProps> = ({
         <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
           Date
         </label>
-        <input
-          type="date"
-          id="date"
-          name="date"
-          value={formData.date}
-          onChange={handleChange}
-          required
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        <DatePicker
+          value={formData.date ? new Date(formData.date) : undefined}
+          onChange={(date) => {
+            setFormData(prev => ({
+              ...prev,
+              date: date ? date.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
+            }));
+          }}
+          placeholder="Pick a date"
         />
       </div>
 
@@ -229,7 +233,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
         <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
           Name
         </label>
-        <input
+        <Input
           type="text"
           id="name"
           name="name"
@@ -237,7 +241,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
           onChange={handleChange}
           required
           placeholder="Enter entry name"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
 
@@ -246,14 +250,16 @@ const EntryForm: React.FC<EntryFormProps> = ({
           <label className="block text-sm font-medium text-gray-700">
             Formulas
           </label>
-          <button
+          <Button
             type="button"
             onClick={addFormula}
-            className="px-3 py-2 text-xs bg-gray-50 text-indigo-800 rounded-md hover:bg-indigo-200 transition-colors flex items-center"
+            variant="outline"
+            size="sm"
+            className="bg-gray-50 border-gray-300 text-indigo-800 hover:bg-indigo-200 transition-colors"
           >
             <Plus size={12} className="mr-1" />
             Add Formula
-          </button>
+          </Button>
         </div>
         <div className="space-y-4">
           {formData.formulas.map((formula, index) => (
@@ -263,13 +269,15 @@ const EntryForm: React.FC<EntryFormProps> = ({
                   Formula {index + 1}
                 </h4>
                 {formData.formulas.length > 1 && (
-                  <button
+                  <Button
                     type="button"
                     onClick={() => removeFormula(index)}
-                    className="text-red-600"
+                    variant="ghost"
+                    size="sm"
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
                   >
                     Remove
-                  </button>
+                  </Button>
                 )}
               </div>
 
@@ -278,7 +286,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
                   <label htmlFor={`shade-${index}`} className="block text-sm font-medium text-gray-600 mb-1">
                     Shade
                   </label>
-                  <input
+                  <Input
                     type="text"
                     id={`shade-${index}`}
                     name={`formula.${index}.shade`}
@@ -286,7 +294,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
                     onChange={handleChange}
                     required
                     placeholder="e.g., 7.1 Ash Blonde"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-900 placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="bg-white border-gray-300 text-gray-900 placeholder-gray-700 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
@@ -294,7 +302,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
                   <label htmlFor={`parts-${index}`} className="block text-sm font-medium text-gray-600 mb-1">
                     Parts
                   </label>
-                  <input
+                  <Input
                     type="number"
                     id={`parts-${index}`}
                     name={`formula.${index}.parts`}
@@ -303,7 +311,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
                     required
                     min="1"
                     placeholder="1"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-900 placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="bg-white border-gray-300 text-gray-900 placeholder-gray-700 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
@@ -311,7 +319,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
                   <label htmlFor={`color-${index}`} className="block text-sm font-medium text-gray-600 mb-1">
                     Color (g)
                   </label>
-                  <input
+                  <Input
                     type="number"
                     id={`color-${index}`}
                     name={`formula.${index}.color`}
@@ -321,7 +329,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
                     min="0"
                     step="0.1"
                     placeholder="30"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-900 placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="bg-white border-gray-300 text-gray-900 placeholder-gray-700 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -334,7 +342,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
         <label htmlFor="developer" className="block text-sm font-medium text-gray-700 mb-2">
           Developer (g) <span className="text-gray-500">(optional)</span>
         </label>
-        <input
+        <Input
           type="number"
           id="developer"
           name="developer"
@@ -343,7 +351,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
           min="0"
           step="1"
           placeholder="60"
-          className="w-full px-3 py-2 border border-gray-300 text-gray-700"
+          className="bg-white border-gray-300 text-gray-700 focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
 
@@ -351,7 +359,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
         <label htmlFor="processingTime" className="block text-sm font-medium text-gray-700 mb-2">
           Processing Time (minutes)
         </label>
-        <input
+        <Input
           type="number"
           id="processingTime"
           name="processingTime"
@@ -360,7 +368,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
           required
           min="0"
           placeholder="30"
-          className="w-full px-3 py-2 border border-gray-300 text-gray-700"
+          className="bg-white border-gray-300 text-gray-700 focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
 
@@ -368,14 +376,14 @@ const EntryForm: React.FC<EntryFormProps> = ({
         <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-2">
           Notes
         </label>
-        <textarea
+        <Textarea
           id="notes"
           name="notes"
           value={formData.notes}
           onChange={handleChange}
           rows={4}
           placeholder="Any additional notes about the process..."
-          className="w-full px-3 py-2 border border-gray-300 text-gray-700"
+          className="bg-white border-gray-300 text-gray-700 focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
 
@@ -458,20 +466,21 @@ const EntryForm: React.FC<EntryFormProps> = ({
 
       <div className={`flex ${showCancel ? 'justify-end space-x-3' : ''}`}>
         {showCancel && (
-          <button
+          <Button
             type="button"
             onClick={onCancel}
-            className="px-6 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-200 font-medium"
+            variant="outline"
+            className="px-6 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 border-gray-300"
           >
             Cancel
-          </button>
+          </Button>
         )}
-        <button
+        <Button
           type="submit"
-          className={`${showCancel ? 'px-6 py-2' : 'w-full py-2.5 px-4'} bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm`}
+          className={`${showCancel ? 'px-6 py-2' : 'w-full py-2.5 px-4'} bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm`}
         >
           {submitLabel}
-        </button>
+        </Button>
       </div>
     </form>
   );
@@ -483,12 +492,14 @@ const EntryForm: React.FC<EntryFormProps> = ({
           <div className='sticky top-0 bg-white border-b px-6 py-4 rounded-t-lg'>
             <div className='flex items-center justify-between'>
               <h2 className='text-xl font-semibold text-gray-900'>{title}</h2>
-              <button
+              <Button
                 onClick={onCancel}
-                className='text-gray-400 hover:text-gray-600 flex items-center justify-center'
+                variant="ghost"
+                size="icon"
+                className='text-gray-400 hover:text-gray-600 hover:bg-gray-100'
               >
                 <X size={20} />
-              </button>
+              </Button>
             </div>
           </div>
           <div className='p-6'>
@@ -505,13 +516,15 @@ const EntryForm: React.FC<EntryFormProps> = ({
         <h1 className="text-2xl font-semibold text-indigo-800">
           {title}
         </h1>
-        <button
+        <Button
           onClick={() => router.push('/')}
-          className="bg-gray-50 text-indigo-800 rounded-full hover:bg-indigo-200 flex items-center justify-center p-2 transition-colors"
+          variant="ghost"
+          size="icon"
+          className="bg-gray-50 text-indigo-800 rounded-full hover:bg-indigo-200 transition-colors p-2"
           aria-label="Close and return to home"
         >
           <X size={20} />
-        </button>
+        </Button>
       </div>
       {formContent}
     </div>
