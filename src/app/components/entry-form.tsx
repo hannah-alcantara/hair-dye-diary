@@ -281,7 +281,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
                 )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 <div>
                   <label htmlFor={`shade-${index}`} className="block text-sm font-medium text-gray-600 mb-1">
                     Shade
@@ -394,7 +394,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
         </label>
 
         {/* Before/After Photo Grid */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           {/* Before Photo */}
           <div>
             <h4 className="text-sm font-medium text-gray-600 mb-2">Before Photo</h4>
@@ -464,20 +464,20 @@ const EntryForm: React.FC<EntryFormProps> = ({
 
       </div>
 
-      <div className={`flex ${showCancel ? 'justify-end space-x-3' : ''}`}>
+      <div className={`flex flex-col sm:flex-row gap-3 ${showCancel ? 'sm:justify-end' : ''}`}>
         {showCancel && (
           <Button
             type="button"
             onClick={onCancel}
             variant="outline"
-            className="px-6 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 border-gray-300"
+            className="w-full sm:w-auto px-6 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 border-gray-300"
           >
             Cancel
           </Button>
         )}
         <Button
           type="submit"
-          className={`${showCancel ? 'px-6 py-2' : 'w-full py-2.5 px-4'} bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm`}
+          className={`${showCancel ? 'w-full sm:w-auto px-6 py-2' : 'w-full py-2.5 px-4'} bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm`}
         >
           {submitLabel}
         </Button>
@@ -487,23 +487,26 @@ const EntryForm: React.FC<EntryFormProps> = ({
 
   if (isModal) {
     return (
-      <div className='fixed inset-0 bg-indigo-800 bg-opacity-50 flex items-center justify-center z-[100] p-4'>
-        <div className='bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto'>
-          <div className='sticky top-0 bg-white border-b px-6 py-4 rounded-t-lg'>
-            <div className='flex items-center justify-between'>
-              <h2 className='text-xl font-semibold text-gray-900'>{title}</h2>
-              <Button
-                onClick={onCancel}
-                variant="ghost"
-                size="icon"
-                className='text-gray-400 hover:text-gray-600 hover:bg-gray-100'
-              >
-                <X size={20} />
-              </Button>
+      <div className='fixed inset-0 bg-gray-50 z-[100] overflow-y-auto'>
+        <div className='min-h-screen bg-gray-50 py-4 sm:py-8 lg:py-12 px-4 sm:px-6 lg:px-8'>
+          <div className='max-w-sm sm:max-w-md lg:max-w-2xl mx-auto'>
+            <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 lg:p-8">
+              <div className="flex items-center justify-between mb-6 sm:mb-8">
+                <h1 className="text-xl sm:text-2xl font-semibold text-indigo-800">
+                  {title}
+                </h1>
+                <Button
+                  onClick={onCancel}
+                  variant="ghost"
+                  size="icon"
+                  className="bg-gray-50 text-indigo-800 rounded-full hover:bg-indigo-200 transition-colors p-2"
+                  aria-label="Close and return to home"
+                >
+                  <X size={20} />
+                </Button>
+              </div>
+              {formContent}
             </div>
-          </div>
-          <div className='p-6'>
-            {formContent}
           </div>
         </div>
       </div>
@@ -511,9 +514,9 @@ const EntryForm: React.FC<EntryFormProps> = ({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-8">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-semibold text-indigo-800">
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 lg:p-8">
+      <div className="flex items-center justify-between mb-6 sm:mb-8">
+        <h1 className="text-xl sm:text-2xl font-semibold text-indigo-800">
           {title}
         </h1>
         <Button

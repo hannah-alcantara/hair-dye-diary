@@ -39,7 +39,13 @@ export default function Home() {
 
   useEffect(() => {
     const savedEntries = JSON.parse(localStorage.getItem("hairDiary") || "[]");
-    setEntries(savedEntries.reverse()); // Show newest first
+    setEntries(savedEntries); // In chronological order (oldest to newest)
+
+    // Navigate to the last page to show newest entries
+    const totalPagesCount = Math.max(1, Math.ceil(savedEntries.length / entriesPerPage));
+    if (totalPagesCount > 1) {
+      setCurrentPage(totalPagesCount - 1);
+    }
   }, []);
 
   const totalPages = Math.max(1, Math.ceil(entries.length / entriesPerPage));
@@ -97,10 +103,8 @@ export default function Home() {
         (entry) => entry.id !== entryToDelete
       );
       setEntries(updatedEntries);
-      localStorage.setItem(
-        "hairDiary",
-        JSON.stringify(updatedEntries.reverse())
-      ); // Reverse back to original order for storage
+      // Store entries in chronological order (oldest to newest)
+      localStorage.setItem("hairDiary", JSON.stringify(updatedEntries));
 
       // Adjust current page if necessary
       const newTotalPages = Math.max(
@@ -135,9 +139,8 @@ export default function Home() {
       entry.id === updatedEntry.id ? updatedEntry : entry
     );
     setEntries(updatedEntries);
-    // For editing, maintain the current display order and store in reverse (oldest first)
-    const storageEntries = [...updatedEntries].reverse();
-    localStorage.setItem("hairDiary", JSON.stringify(storageEntries));
+    // Store entries in chronological order (oldest to newest), pagination is preserved
+    localStorage.setItem("hairDiary", JSON.stringify(updatedEntries));
     setShowEditModal(false);
     setEntryToEdit(null);
   };
@@ -158,48 +161,88 @@ export default function Home() {
         : entry
     );
     setEntries(updatedEntries);
-    // For photo uploads, maintain the current display order and store in reverse (oldest first)
-    const storageEntries = [...updatedEntries].reverse();
-    localStorage.setItem("hairDiary", JSON.stringify(storageEntries));
+    // Store entries in chronological order (oldest to newest)
+    localStorage.setItem("hairDiary", JSON.stringify(updatedEntries));
   };
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 py-20 px-4 relative'>
-      <div className='max-w-4xl mx-auto relative z-10'>
-        {/* Open Notebook Pages - Left and Right */}
-        <PageFlip
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPrevPage={prevPage}
-          onNextPage={nextPage}
-        >
-          <div className='relative perspective'>
-            {/* Drop shadow for depth */}
-            <div className='absolute inset-0 bg-black/20 shadow-2xl blur-sm translate-x-1 translate-y-1 rounded-t-lg'></div>
+    <div className='min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 py-4 sm:py-8 md:py-20 px-2 sm:px-4 relative'>
+      <div className='max-w-6xl mx-auto relative z-10'>
+        {/* Mobile View - Single Page */}
+        <div className='md:hidden'>
+          <div className='bg-white rounded-lg shadow-xl p-4 mb-4 min-h-[500px]'>
+            <LogbookPage
+              side='left'
+              entry={currentEntries[0] || currentEntries[1]}
+              isEmpty={!currentEntries[0] && !currentEntries[1]}
+              isEmptyState={
+                currentEntries.length === 0 && entries.length === 0
+              }
+              onDeleteEntry={handleDeleteEntry}
+              onEditEntry={handleEditEntry}
+              onUploadPhoto={handleUploadPhoto}
+              formatDate={formatDate}
+              formatFormulas={formatFormulas}
+            />
+          </div>
 
-            <div className='flex bg-[#f5f5f5] shadow-2xl relative min-h-[700px] pages-container'>
-              {/* Left Page - Always visible */}
-              <LogbookPage
-                side='left'
-                entry={currentEntries[0]}
-                isEmpty={!currentEntries[0]}
-                isEmptyState={
-                  currentEntries.length === 0 && entries.length === 0
-                }
-                onDeleteEntry={handleDeleteEntry}
-                onEditEntry={handleEditEntry}
-                onUploadPhoto={handleUploadPhoto}
-                formatDate={formatDate}
-                formatFormulas={formatFormulas}
-              />
+          {/* Mobile Navigation */}
+          <div className='flex justify-between items-center px-4 py-2'>
+            <button
+              onClick={prevPage}
+              disabled={currentPage === 0}
+              className='px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-indigo-700 transition-colors'
+            >
+              Previous
+            </button>
+            <span className='text-sm text-gray-600'>
+              Page {currentPage + 1} of {totalPages}
+            </span>
+            <button
+              onClick={nextPage}
+              disabled={currentPage >= totalPages - 1}
+              className='px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-indigo-700 transition-colors'
+            >
+              Next
+            </button>
+          </div>
+        </div>
 
-              {/* Center Binding */}
-              <div className='w-3 shadow-inner relative'>
-                <div className='absolute inset-y-0 left-1/2 w-px bg-blue-950'></div>
-              </div>
+        {/* Desktop View - Notebook Style */}
+        <div className='hidden md:block'>
+          <PageFlip
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPrevPage={prevPage}
+            onNextPage={nextPage}
+          >
+            <div className='relative perspective'>
+              {/* Drop shadow for depth */}
+              <div className='absolute inset-0 bg-black/20 shadow-2xl blur-sm translate-x-1 translate-y-1 rounded-t-lg'></div>
 
-              {/* Right Page with 3D flip wrapper */}
-              <div className='flex-1 relative page-wrapper'>
+              <div className='flex bg-[#f5f5f5] shadow-2xl relative min-h-[600px] lg:min-h-[700px] pages-container'>
+                {/* Left Page - Always visible */}
+                <LogbookPage
+                  side='left'
+                  entry={currentEntries[0]}
+                  isEmpty={!currentEntries[0]}
+                  isEmptyState={
+                    currentEntries.length === 0 && entries.length === 0
+                  }
+                  onDeleteEntry={handleDeleteEntry}
+                  onEditEntry={handleEditEntry}
+                  onUploadPhoto={handleUploadPhoto}
+                  formatDate={formatDate}
+                  formatFormulas={formatFormulas}
+                />
+
+                {/* Center Binding */}
+                <div className='w-2 lg:w-3 shadow-inner relative'>
+                  <div className='absolute inset-y-0 left-1/2 w-px bg-blue-950'></div>
+                </div>
+
+                {/* Right Page with 3D flip wrapper */}
+                <div className='flex-1 relative page-wrapper'>
                 {/* Current right page */}
                 <div
                   className={`page-front ${
@@ -265,12 +308,13 @@ export default function Home() {
             </div>
           </div>
         </PageFlip>
+        </div>
       </div>
 
-      {/* Floating New Entry Button */}
+      {/* Floating New Entry Button - Responsive */}
       <Link
         href='/logbook'
-        className='fixed bottom-6 right-6 bg-indigo-800 hover:bg-indigo-700 text-white w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center text-2xl font-bold z-50 transform hover:scale-110'
+        className='fixed bottom-4 right-4 sm:bottom-6 sm:right-6 bg-indigo-800 hover:bg-indigo-700 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center text-xl sm:text-2xl font-bold z-50 transform hover:scale-110'
         title='Add New Entry'
       >
         <Plus />
@@ -279,7 +323,7 @@ export default function Home() {
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className='fixed inset-0 backdrop-blur-xs flex items-center justify-center z-[100] p-4'>
-          <div className='bg-white rounded-lg shadow-2xl max-w-md w-full mx-4 transform transition-all'>
+          <div className='bg-white rounded-lg shadow-2xl max-w-sm sm:max-w-md w-full mx-4 transform transition-all'>
             <div className='p-6'>
               <div className='flex items-center mb-4'>
                 <div className='w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4'>
@@ -313,16 +357,16 @@ export default function Home() {
                 permanently removed.
               </p>
 
-              <div className='flex space-x-3 justify-end'>
+              <div className='flex flex-col sm:flex-row gap-3 sm:justify-end'>
                 <button
                   onClick={cancelDelete}
-                  className='px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-200 font-medium'
+                  className='w-full sm:w-auto px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-200 font-medium'
                 >
                   Cancel
                 </button>
                 <button
                   onClick={confirmDelete}
-                  className='px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors duration-200 font-medium'
+                  className='w-full sm:w-auto px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors duration-200 font-medium'
                 >
                   Delete Entry
                 </button>

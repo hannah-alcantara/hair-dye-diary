@@ -90,9 +90,9 @@ const LogbookPage: React.FC<LogbookPageProps> = ({
   formatDate,
   formatFormulas,
 }) => {
-  const borderClass = side === "left" ? "border-l-10" : "border-r-10";
-  const marginLineClass = side === "left" ? "left-8" : "right-8";
-  const paddingClass = side === "left" ? "pl-12 pr-4" : "pl-4 pr-12";
+  const borderClass = side === "left" ? "border-l-4 md:border-l-8 lg:border-l-10" : "border-r-4 md:border-r-8 lg:border-r-10";
+  const marginLineClass = side === "left" ? "left-4 md:left-6 lg:left-8" : "right-4 md:right-6 lg:right-8";
+  const paddingClass = side === "left" ? "pl-6 md:pl-8 lg:pl-12 pr-2 md:pr-3 lg:pr-4" : "pl-2 md:pl-3 lg:pl-4 pr-6 md:pr-8 lg:pr-12";
 
   const handlePhotoUpload = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -109,19 +109,19 @@ const LogbookPage: React.FC<LogbookPageProps> = ({
   const renderEmptyState = () => {
     if (side === "right" && isEmptyState) {
       return (
-        <div className='text-center py-16'>
+        <div className='text-center py-8 md:py-12 lg:py-16'>
           <div className='mb-4 flex justify-center'>
-            <Sparkles size={64} className='text-yellow-400' />
+            <Sparkles size={48} className='text-yellow-400 md:w-16 md:h-16' />
           </div>
-          <h3 className='text-xl font-serif text-gray-600 mb-2'>
+          <h3 className='text-lg md:text-xl font-serif text-gray-600 mb-2'>
             Your hair journey starts here
           </h3>
-          <p className='text-gray-500 mb-6'>
+          <p className='text-sm md:text-base text-gray-500 mb-4 md:mb-6'>
             No entries yet. Add your first hair dye experience!
           </p>
           <Link
             href='/logbook'
-            className='inline-flex items-center px-4 py-2 bg-indigo-800 hover:bg-indigo-700 text-white rounded-md transition-colors shadow-md text-sm'
+            className='inline-flex items-center px-3 py-2 md:px-4 md:py-2 bg-indigo-800 hover:bg-indigo-700 text-white rounded-md transition-colors shadow-md text-xs md:text-sm'
           >
             Add First Entry
           </Link>
@@ -135,27 +135,27 @@ const LogbookPage: React.FC<LogbookPageProps> = ({
 
     return (
       <div className='h-full'>
-        <div className='mb-4'>
-          <div className='flex items-start justify-between mb-4'>
+        <div className='mb-3 md:mb-4'>
+          <div className='flex items-start justify-between mb-3 md:mb-4'>
             <div>
-              <h2 className='text-lg font-serif font-bold text-gray-800 mb-1'>
+              <h2 className='text-base md:text-lg font-serif font-bold text-gray-800 mb-1'>
                 {entry.name}
               </h2>
-              <p className='text-gray-600 text-xs font-medium'>
+              <p className='text-gray-600 text-xs md:text-sm font-medium'>
                 {formatDate(entry.date)}
               </p>
             </div>
-            <div className='flex items-center space-x-2'>
+            <div className='flex items-center space-x-1 md:space-x-2'>
               <button
                 onClick={() => onEditEntry(entry.id)}
-                className='w-6 h-6 bg-gray-50 text-indigo-800 rounded-full hover:bg-indigo-200 transition-colors duration-200 flex items-center justify-center'
+                className='w-6 h-6 md:w-7 md:h-7 bg-gray-50 text-indigo-800 rounded-full hover:bg-indigo-200 transition-colors duration-200 flex items-center justify-center'
                 title='Edit entry'
               >
                 <Edit size={12} />
               </button>
               <button
                 onClick={() => onDeleteEntry(entry.id)}
-                className='w-6 h-6 bg-gray-50 text-indigo-800 rounded-full hover:bg-indigo-200 transition-colors duration-200 flex items-center justify-center'
+                className='w-6 h-6 md:w-7 md:h-7 bg-gray-50 text-indigo-800 rounded-full hover:bg-indigo-200 transition-colors duration-200 flex items-center justify-center'
                 title='Delete entry'
               >
                 <X size={12} />
